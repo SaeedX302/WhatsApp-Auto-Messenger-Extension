@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WA Spammer Pro</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      padding: 20px;
+      width: 280px;
+      border-radius: 15px;
+      transition: background 0.5s, color 0.5s;
+    }
+
+    body.dark-mode {
+      background: linear-gradient(135deg, #00ffcc, #ff00ff);
+      color: white;
+    }
+
+    body.light-mode {
+      background: #f2f2f2;
+      color: #111;
+    }
+
+    body.light-mode textarea,
+    body.light-mode input {
+      background-color: #fff;
+      color: #111;
+    }
+
+    body.light-mode button {
+      background-color: #008CBA;
+      color: white;
+    }
+
+    body.light-mode .tab-buttons button {
+      background-color: #4CAF50;
+    }
+
+    body.light-mode .tab-buttons button.active {
+      background-color: #128C7E;
+    }
+
+    h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 20px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #4CAF50;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    .tab-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .tab-buttons button {
+      width: 48%;
+      padding: 12px;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: 0.3s;
+    }
+
+    .tab-buttons button.active {
+      background-color: #128C7E;
+    }
+
+    .tab-buttons button:hover {
+      background-color: #45a049;
+    }
+
+    .tab-content {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    textarea, input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      background: #f4f4f4;
+      font-size: 16px;
+      color: #333;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #ff7b00;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    button:hover {
+      background-color: #ff5e00;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    footer a {
+      color: #ff7b00;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body class="dark-mode">
+  <div class="header-row">
+    <h3>WA Spamer Pro</h3>
+    <label class="switch">
+      <input type="checkbox" id="themeToggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="tab-buttons">
+    <button id="tab1Btn" class="active">Type Message</button>
+    <button id="tab2Btn">Multipal Spam Message</button>
+  </div>
+
+  <div id="tab1" class="tab-content active">
+    <label>1. Type Message:</label>
+    <textarea id="msgBox" placeholder="Type Your Message..."></textarea>
+    <button id="sendBtn1">🚀 Send Spam</button>
+  </div>
+
+  <div id="tab2" class="tab-content">
+    <label>2. Type Message:</label>
+    <textarea id="msgBox2" placeholder="Type Your Message..."></textarea>
+    <label>2. How Much Time You Want To Send?:</label>
+    <input id="msgCount" type="number" min="1" placeholder="Only Write Numbers " />
+    <button id="sendBtn2">🚀 Send Spam</button>
+  </div>
+
+  <footer>
+    <p>Credits to <a href="https://github.com/SaeedX302/WhatsApp-Spam/" target="_blank">༯𝙎ค૯𝙀𝘿</a></p>
+  </footer>
+
+  <script src="popup.js"></script>
+  <script>
+    // Light/Dark Mode Toggle Handler
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggle = document.getElementById("themeToggle");
+      const savedTheme = localStorage.getItem("theme") || "dark";
+      document.body.classList.add(`${savedTheme}-mode`);
+      toggle.checked = savedTheme === "light";
+
+      toggle.addEventListener("change", () => {
+        const mode = toggle.checked ? "light" : "dark";
+        document.body.classList.remove("light-mode", "dark-mode");
+        document.body.classList.add(`${mode}-mode`);
+        localStorage.setItem("theme", mode);
+      });
+    });
+  </script>
+</body>
+</html>
