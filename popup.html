@@ -1,17 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>WA Spammer Pro</title>
+
+  <!-- System / San Francisco fallback stack -->
+  <style>
+    /* Use system fonts with SF fallbacks for macOS/iOS look */
+    :root { --sans: -apple-system, "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, "Noto Sans", Arial, sans-serif; }
+    html,body { font-family: var(--sans); }
+  </style>
+
+  <!-- Theme stylesheet -->
   <link rel="stylesheet" href="popup.css" />
 </head>
-<body>
+<body class="liquid-glass-mode">
+  <!-- Background liquid shapes -->
+  <div class="bg-bleed">
+    <svg class="bg-shape bg-shape-1" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="g1" x1="0" x2="1">
+          <stop offset="0" stop-color="#A9D6F5" stop-opacity="0.75"/>
+          <stop offset="1" stop-color="#C8A8E9" stop-opacity="0.65"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#g1)" d="M0 300 C150 120 320 120 450 220 C580 320 740 300 800 220 L800 600 L0 600 Z"></path>
+    </svg>
+
+    <svg class="bg-shape bg-shape-2" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="g2" x1="0" x2="1">
+          <stop offset="0" stop-color="#FF69F5" stop-opacity="0.16"/>
+          <stop offset="1" stop-color="#66F7FF" stop-opacity="0.14"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#g2)" d="M0 150 C120 80 260 0 420 40 C580 80 700 180 800 140 L800 0 L0 0 Z"></path>
+    </svg>
+  </div>
+
   <div class="container">
     <header class="header-row" role="banner">
-      <h1 class="title">WA Spammer Pro</h1>
+      <div class="brand">
+        <h1 class="title">WA Spammer Pro</h1>
+        <span class="subtitle">Liquid Glass Theme</span>
+      </div>
 
-      <div class="theme-control">
+      <div class="theme-control" title="Toggle theme">
         <label class="switch" for="themeToggle">Theme</label>
         <input type="checkbox" id="themeToggle" aria-label="Toggle light and dark theme" />
       </div>
@@ -19,24 +54,30 @@
 
     <nav class="tab-buttons" role="tablist" aria-label="Message mode tabs">
       <button id="tab1Btn" class="tab-btn active" role="tab" aria-controls="tab1" aria-selected="true">Type Message</button>
-      <button id="tab2Btn" class="tab-btn" role="tab" aria-controls="tab2" aria-selected="false">Multiple Spam Message</button>
+      <button id="tab2Btn" class="tab-btn" role="tab" aria-controls="tab2" aria-selected="false">Multiple</button>
     </nav>
 
     <main class="tabs">
       <section id="tab1" class="tab-content active" role="tabpanel" aria-labelledby="tab1Btn">
         <label for="msgBox" class="field-label">1. Type Message</label>
-        <textarea id="msgBox" placeholder="Type your message — each line will be sent as a separate message" aria-label="Type message"></textarea>
-        <button id="sendBtn1" class="action-btn" title="Send messages line by line">🚀 Send Spam</button>
+
+        <div class="glass-card">
+          <textarea id="msgBox" placeholder="Type your message — each line will be sent as a separate message" aria-label="Type message"></textarea>
+          <button id="sendBtn1" class="action-btn shimmer" title="Send messages line by line">🚀 Send Spam</button>
+        </div>
       </section>
 
       <section id="tab2" class="tab-content" role="tabpanel" aria-labelledby="tab2Btn" hidden>
         <label for="msgBox2" class="field-label">2. Type Message</label>
-        <textarea id="msgBox2" placeholder="Type your single message here" aria-label="Message to repeat"></textarea>
 
-        <label for="msgCount" class="field-label">How many times to send?</label>
-        <input id="msgCount" type="number" min="1" placeholder="Enter a number" aria-label="Number of times to send" />
+        <div class="glass-card">
+          <textarea id="msgBox2" placeholder="Type your single message here" aria-label="Message to repeat"></textarea>
 
-        <button id="sendBtn2" class="action-btn" title="Send repeated messages">🚀 Send Spam</button>
+          <label for="msgCount" class="field-label small">How many times to send?</label>
+          <input id="msgCount" type="number" min="1" placeholder="Enter a number" aria-label="Number of times to send" />
+
+          <button id="sendBtn2" class="action-btn shimmer" title="Send repeated messages">🚀 Send Spam</button>
+        </div>
       </section>
     </main>
 
@@ -45,63 +86,38 @@
     </footer>
   </div>
 
+  <!-- Minimal UI-only script kept here so popup.js can still mount -->
   <script>
-    // Initialize theme on load (keeps UI-only changes here)
     (function () {
       const toggle = document.getElementById('themeToggle');
-      const savedTheme = localStorage.getItem('theme') || 'dark';
-      document.body.classList.remove('light-mode', 'dark-mode');
-      document.body.classList.add(`${savedTheme}-mode`);
-      toggle.checked = savedTheme === 'light';
-
-      // Keep behavior simple: update class and localStorage on change
+      const saved = localStorage.getItem('liquid-theme') || 'on';
+      if (saved === 'on') document.body.classList.add('liquid-glass-mode');
+      else document.body.classList.remove('liquid-glass-mode');
+      toggle.checked = saved === 'on';
       toggle.addEventListener('change', () => {
-        const mode = toggle.checked ? 'light' : 'dark';
-        document.body.classList.remove('light-mode', 'dark-mode');
-        document.body.classList.add(`${mode}-mode`);
-        localStorage.setItem('theme', mode);
+        const on = toggle.checked;
+        document.body.classList.toggle('liquid-glass-mode', on);
+        localStorage.setItem('liquid-theme', on ? 'on' : 'off');
       });
 
-      // Basic accessible tab keyboard handling
+      // Tab activation (keeps original IDs)
       const tab1Btn = document.getElementById('tab1Btn');
       const tab2Btn = document.getElementById('tab2Btn');
       const tab1 = document.getElementById('tab1');
       const tab2 = document.getElementById('tab2');
-
-      function activateTab(tabBtn, tabPanel) {
-        // buttons
-        [tab1Btn, tab2Btn].forEach(b => {
-          b.classList.toggle('active', b === tabBtn);
-          b.setAttribute('aria-selected', b === tabBtn ? 'true' : 'false');
-        });
-
-        // panels
+      function activateTab(btn, panel) {
+        [tab1Btn, tab2Btn].forEach(b => b.classList.toggle('active', b === btn));
         [tab1, tab2].forEach(p => {
-          if (p === tabPanel) {
-            p.classList.add('active');
-            p.removeAttribute('hidden');
-          } else {
-            p.classList.remove('active');
-            p.setAttribute('hidden', 'true');
-          }
+          if (p === panel) { p.classList.add('active'); p.removeAttribute('hidden'); }
+          else { p.classList.remove('active'); p.setAttribute('hidden','true'); }
         });
       }
-
-      tab1Btn.addEventListener('click', () => activateTab(tab1Btn, tab1));
-      tab2Btn.addEventListener('click', () => activateTab(tab2Btn, tab2));
-
-      // keyboard support
-      [tab1Btn, tab2Btn].forEach(btn =>
-        btn.addEventListener('keydown', (e) => {
-          if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-            // Switch focus between two tabs
-            (btn === tab1Btn ? tab2Btn : tab1Btn).focus();
-          }
-        })
-      );
+      tab1Btn.addEventListener('click', ()=> activateTab(tab1Btn, tab1));
+      tab2Btn.addEventListener('click', ()=> activateTab(tab2Btn, tab2));
     })();
   </script>
 
+  <!-- Keep original behavior JS loaded after UI -->
   <script src="popup.js"></script>
 </body>
-  </html>
+</html>
